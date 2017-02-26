@@ -1,0 +1,80 @@
+{
+  "/dotSize": {
+    "min": 0.5,
+    "max": 30,
+    "value": 2.2208333015441895
+  },
+  "/partialFine": {
+    "min": 0,
+    "max": 100,
+    "value": 0
+  },
+  "/bDrawDiagram": {"value": 1},
+  "/alphaContours": {
+    "min": 0,
+    "max": 255,
+    "value": 255
+  },
+  "/levels": {
+    "min": 0,
+    "max": 20,
+    "value": 3.1666669845581055
+  },
+  "/bDrawContours": {"value": 0},
+  "/numDots": {
+    "min": 1,
+    "max": 30,
+    "value": 3.6583333015441895
+  },
+  "/levelMax": {
+    "min": 0.10000000149011612,
+    "max": 1,
+    "value": 0.6025000214576721
+  },
+  "/thresh": {
+    "min": 0,
+    "max": 1,
+    "value": 0
+  },
+  "/bDrawDiagramLines": {"value": 1},
+  "/blur": {
+    "min": 0,
+    "max": 4,
+    "value": 1.033333420753479
+  },
+  "/bDrawContoursVertex": {"value": 0},
+  "/colorRange": {
+    "min": 0,
+    "max": 360,
+    "value": 303
+  },
+  "/bDrawDiagramDotNumbers": {"value": 1},
+  "/bDrawImage": {"value": 0},
+  "/partialFactor": {
+    "min": 0,
+    "max": 10,
+    "value": 0
+  },
+  "/maxPixelH": {
+    "min": 1,
+    "max": 150,
+    "value": 75.5
+  },
+  "/bComputeGlobalDiagram": {"value": 0},
+  "/lineThresh": {
+    "min": 1,
+    "max": 150,
+    "value": 150
+  },
+  "/txtSize": {
+    "min": 0.5,
+    "max": 30,
+    "value": 8.612500190734863
+  },
+  "/colorStart": {
+    "min": 0,
+    "max": 360,
+    "value": 39.000003814697266
+  },
+  "/Algorithm": {"value": 2}
+}

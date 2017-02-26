@@ -1,16 +1,16 @@
 /*
- * Graphical User Interface by Andreas Schlegel 
+ * Graphical User Interface by Andreas Schlegel
  * ControlP5 : www.sojamo.de/controlP5
  * Using version 2.2.5
- *
+ * SOFT used for Fête du Code Pompidou March 2017
  */
 
 ControlP5 INTERFACES;
-//////////////////////// INTERFACE VARIABLES 
+//////////////////////// INTERFACE VARIABLES
 
 
 //////////////////////////////////////////
-void guiInit() { 
+void guiInit() {
   PFont p = createFont("FiraMono-Regular", 12);
   textFont(p, 12);
   ControlFont f = new ControlFont(p, 12);
@@ -54,19 +54,19 @@ void guiInit() {
     .setRange(0.4, 6.0).setValue(0.50).setGroup(g1)
       .setSize(100, 15)
         .setColorBackground(#F5F5F5).setColorForeground(#A09E9F)
-          .setColorValueLabel(#525252).setColorActive(#F08D0C); 
+          .setColorValueLabel(#525252).setColorActive(#F08D0C);
 
   Slider ls3 = INTERFACES.addSlider("SEGMENT").setPosition(10, 60)
     .setRange(1, 50).setValue(10).setGroup(g1)
       .setSize(100, 15)
         .setColorBackground(#F5F5F5).setColorForeground(#A09E9F)
-          .setColorValueLabel(#525252).setColorActive(#F08D0C);      
+          .setColorValueLabel(#525252).setColorActive(#F08D0C);
 
   Slider ls4 = INTERFACES.addSlider("INTERVALLE").setPosition(10, 80)
     .setRange(1, 50).setValue(2).setGroup(g1)
       .setSize(100, 15)
         .setColorBackground(#F5F5F5).setColorForeground(#A09E9F)
-          .setColorValueLabel(#525252).setColorActive(#F08D0C);      
+          .setColorValueLabel(#525252).setColorActive(#F08D0C);
 
 
   Bang b1 = INTERFACES.addBang("SAVE").setPosition(10, 110)
@@ -93,10 +93,10 @@ void guiInit() {
   Bang b5 = INTERFACES.addBang("QUIT").setPosition(10, 150)
     .setSize(15, 15).setGroup(g1).setCaptionLabel("quit")
       .setColorBackground(#F5F5F5).setColorForeground(#A09E9F)
-        .setColorValueLabel(#525252).setColorActive(#F08D0C);  
+        .setColorValueLabel(#525252).setColorActive(#F08D0C);
 
 
-  Bang gb1 = INTERFACES.addBang("bangLoad").setPosition(10, 210)        
+  Bang gb1 = INTERFACES.addBang("bangLoad").setPosition(10, 210)
     .setSize(10, 10).setTriggerEvent(Bang.RELEASE).setGroup(g1).setCaptionLabel("load IMG")
       .setColorBackground(#0D6FBC).setColorForeground(#0D6FBC);
 }
@@ -104,15 +104,15 @@ void guiInit() {
 ////////////////////////////////////////// END INTERFACE SETTINGS
 /*
 void controlEvent(ControlEvent theEvent) {
-  // Update strategy list 
+  // Update strategy list
   if (theEvent.isGroup()) {
     // check if the Event was triggered from a ControlGroup
     //println("event from group : "+theEvent.getGroup().getValue()+" from "+theEvent.getGroup());
     String s = theEvent.getGroup().getName();
     //println(s);
-    if (s.equals("DrawingStrategy")) { 
+    if (s.equals("DrawingStrategy")) {
       STRATEGY_INDEX = (int)theEvent.getGroup().getValue();
-      background(0);  
+      background(0);
       //APP.initApp();
       APP.CURRENT_DS = APP.theStrategies.get( STRATEGY_INDEX );
     }
@@ -123,7 +123,7 @@ void controlEvent(ControlEvent theEvent) {
 }
 */
 
-// UPDATING BANG VALUES : >>>	
+// UPDATING BANG VALUES : >>>
 public void SAVE() {
   SAVE_DRAWING_COORDS = true;
   //APP.theMachine.setMachineOrigins();
@@ -137,7 +137,7 @@ public void START() {
   println("Number of coordinate points = " +APP.theMachine.COORDS_DATA_LENGTH);
   int n = APP.theMachine.COORDS_DATA_LENGTH;
   String message = "N° pnts = "+n;
-  MSG.addMessage("Data MSG", message); 
+  MSG.addMessage("Data MSG", message);
   FIRST_COORD=true;
   //}
   //println("### bang(). a bang event. setting drawing coords to "+FIRST_COORD);
@@ -170,7 +170,7 @@ void DrawingStrategy(int n){
   //background(0);
   APP.initApp();
   INTERFACES.get(ScrollableList.class, "DrawingStrategy").getItem(n);
-  APP.CURRENT_DS = APP.theStrategies.get( n ); 
+  APP.CURRENT_DS = APP.theStrategies.get( n );
 }
 
 /////////////////////////////////////////// IMAGE SELECTION FROM PUTER
@@ -193,7 +193,7 @@ void fileSelected(File selection) {
       String s = f.getName();
       String message = "New file: "+s;
       MSG.addMessage("Data MSG", message);
-    } else {   
+    } else {
       APP.CURRENT_DS.SHP = RG.loadShape("anne_algo.svg");
     }
   }

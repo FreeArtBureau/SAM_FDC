@@ -1,5 +1,6 @@
 /*
  * READS JSON DATA
+ * updated 28.02.16
  */
 
 class JsonData {
@@ -18,10 +19,6 @@ class JsonData {
     json = new JSONObject();
     arrayOfCoords = new JSONArray();
     json.setJSONArray("coordinates", arrayOfCoords);
-    //this.fileName = _fileName;
-    //this.idIndex = _idIndex;
-
-    // portrait.setInt("id",idIndex);
     isSave = false;
   }
 
@@ -30,7 +27,6 @@ class JsonData {
     pnts = _pnts;
     for (int i=0; i<pnts.size(); i++) {
       JSONObject data = new JSONObject();
-      //PVector p =
       data.setInt("index", i);
       data.setFloat("x", pnts.get(i).x);
       data.setFloat("y", pnts.get(i).y);
@@ -52,17 +48,20 @@ class JsonData {
 
  // need to add an argument for loading indexed files
   void loadData(String _fileName) {
-    //idIndex = _id;
-    //values = loadJSONObject( filePath + "jsonDataPortraits_"+idIndex+".json");
     this.fileName = _fileName;
     println(fileName);
+    try{
     values = loadJSONObject( filePath + fileName);
     //println(values);
     println("JSON data loaded ;–)");
+  }catch(Exception e) {
+    //println("unable to load jsonFile...problem");
+    }
   }
 
   ArrayList<PVector> getPoints() {
     ArrayList<PVector> points = new ArrayList<PVector>();
+    try{
     JSONArray dataJSON = values.getJSONArray("coordinates");
     for (int i=0; i<dataJSON.size (); i++) {
          JSONObject content =  dataJSON.getJSONObject(i);
@@ -71,6 +70,9 @@ class JsonData {
           float y = content.getFloat("y");
           PVector p = new PVector(x, y);
           points.add(p);
+    }
+  }catch(Exception e) {
+    //println("unable to get points from json data...problem");
     }
     return points;
   }

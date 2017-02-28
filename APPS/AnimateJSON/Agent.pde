@@ -1,98 +1,101 @@
 /**
  * The Agent class gives graphical feedback on drawing
+ * updated 28.02.16
  */
 
-class Agent {
 
-  PVector location;
-  PVector velocity;
-  PVector acceleration;
-  boolean arrived;
+class Agent {
+  PGraphics pg;
   ArrayList<PVector> PNTS;
-  PVector CURRENT_POS; // current postition for SAM
-  int CURRENT_INDEX;
+  PVector CURRENT_POS;
+  int COORDS_DATA_LENGTH, CURRENT_INDEX;
+
+  PVector LOC, VEL, VELDIR;
+  boolean PEN_UP, PEN_DOWN, ARRIVED, FINISHED_DRAWING;
   float TARGET_DIST;
-  float THRESH_MAX = 85;
-  boolean bStart;
-  float maxSpeed;
+  boolean bStart = false;
+  float MAX_SPEED;
+  float THRESH_MAX = 40;
   float dia;
-  color c;
+  float hue;
+  float SCALING;
+
 
   Agent(float _sp, float pointSize) {
-    location = new PVector(0, 0);
-    acceleration = new PVector(0, 0);
-    velocity = new PVector(0, 0);
-    arrived = false;
-    this.dia = pointSize;
-    c = color(255, 200, 0);
-    maxSpeed = _sp;
     PNTS = new ArrayList<PVector>();
-    CURRENT_INDEX = 0;
-    bStart = true;
+    LOC = new PVector(0, 0);
+    VEL = new PVector(0, 0);
+    CURRENT_POS = new PVector();
+
+    ARRIVED = false;
+    FINISHED_DRAWING = false;
+    TARGET_DIST = 0.0;
+    this.MAX_SPEED = _sp;
+    bStart = false;
+    this.dia = pointSize;
+    hue = 89;
+    pg = createGraphics(width, height);
   }
 
-  void drawAgent(){
-    if(bStart == false) return;
-
-    boolean is_Finished = checkArrayLength(PNTS.size(), CURRENT_INDEX);
-
-    if (is_Finished){
-      bStart = false;
-      println("Finished drawing, what next ?");
+  void drawAgent(float _drawingSp, float _x, float _y, float _s){
+    this.MAX_SPEED = _s;
+    this.SCALING = _s;
+    /////////////////////////////////
+    boolean is_Finished = checkArrayLength(COORDS_DATA_LENGTH, CURRENT_INDEX);
+    if (is_Finished) {
+      FINISHED_DRAWING = true;
       CURRENT_INDEX = 0;
-      bStart = true;
-      is_Finished = false;
-      c = color(255, random(200), random(100,255));
-      //quitMachine();
+      hue = random(360);
+      println(hue);
+      clearScreen();
+      drawingYPos += 90; ///////   NOT HERE !!!
+    }else{
+            FINISHED_DRAWING = false;
     }
 
-    moveTo(CURRENT_POS);
-    boolean arrived = checkArrival();
-    if (arrived) {
-      PVector prevPos = CURRENT_POS;
+    if (ARRIVED) {
+      PVector prevPos = (PVector)PNTS.get(CURRENT_INDEX);
       CURRENT_POS = chooseNextPosition();
+      computeVELDirection(prevPos, CURRENT_POS);
       TARGET_DIST = calculateDistance(prevPos, CURRENT_POS);
+      ARRIVED = false;
     }
-
-    //println(TARGET_DIST);
+    /*
+     * When we move, do we move with pen down or pen up ?
+     * Depends on THRESH_MAX variable
+     */
     if (TARGET_DIST>=THRESH_MAX) {
     } else {
-      displayAgent();
+      displayAgent(_x,_y,_s);
     }
+
+    // Move to new position
+    VEL.x = _drawingSp*VELDIR.x;
+    VEL.y = _drawingSp*VELDIR.y;
+    //VEL.limit(MAX_SPEED);
+    LOC.add(VEL);
+
+    if (dist(LOC.x, LOC.y, CURRENT_POS.x, CURRENT_POS.y) <= 1.5) {
+      LOC.set(CURRENT_POS);
+      displayAgent(_x,_y,_s);
+      ARRIVED = true;
+    }
+    image(pg,0,0);
   }
 
-  /**
-   * A method that receives a new target destination and calculates distance
-   * from current position. It then moves to this new target position.
-   * It also switches the 'arrived' boolean
-   */
-  void moveTo(PVector target) {
-    PVector distance = PVector.sub(target, location);  // A vector pointing from the location to the target
-    // newDestination = distance minus Velocity
-    PVector newDestination = PVector.sub(distance, velocity);
-    acceleration.add(newDestination);
-
-    // Check arrival and set boolean to true
-    if ((target.x == location.x) || (target.y == location.y)) {
-      arrived = true;
-    }
+  void clearScreen(){
+    pg.beginDraw();
+    pg.background(237,100,7);
+    pg.endDraw();
   }
 
-  /**
-   * Method for checking arrival
-   *
-   */
-  boolean checkArrival() {
-    boolean t = false;
-    if (arrived) {
-      t = true;
-    }
-    arrived = false;
-    return t;
-  }
+  void computeVELDirection(PVector _pos, PVector _target){
+      VELDIR = PVector.sub(_target, _pos);
+      VELDIR.normalize();
+      }
 
    PVector chooseNextPosition() {
-     if (CURRENT_INDEX != PNTS.size()) {
+     if (CURRENT_INDEX != PNTS.size()-1) {
        CURRENT_INDEX++;
      }
      PVector v = PNTS.get(CURRENT_INDEX);
@@ -102,22 +105,35 @@ class Agent {
   void setCoordPnts(ArrayList _p){
     PNTS = _p;
     CURRENT_POS = PNTS.get(0);
-    location = CURRENT_POS;
+    LOC = CURRENT_POS;
+    this.COORDS_DATA_LENGTH = PNTS.size();
+    computeVELDirection(LOC, CURRENT_POS);
+    FINISHED_DRAWING = false;
   }
 
-  void update() {
-    velocity.add(acceleration);
-    velocity.limit(maxSpeed);
-    location.add(velocity);
-    acceleration.mult(0);
+  void displayAgent(float _x, float _y, float _s) {
+    //int w = int(1280*_s);
+    //int h = int(740*_s);
+    //pg = createGraphics(w, h);
+     pg.beginDraw();
+     pg.colorMode(HSB,360,100,100);
+     pg.noStroke();
+    //hue = _h;
+    pg.fill(hue,100,100);
+    pg.pushMatrix();
+    pg.translate(_x,_y);
+    pg.scale(_s);
+    pg.ellipse(LOC.x, LOC.y, dia, dia);
+    pg.popMatrix();
+    pg.endDraw();
   }
 
-
-  void displayAgent() {
+  void displayPoints(){
+    fill(1,100,100);
     noStroke();
-    fill(c);
-    ellipse(location.x, location.y, dia, dia);
-    //rect(location.x, location.y, dia, dia);
+      for(int i=0; i<PNTS.size();i++){
+        ellipse(PNTS.get(i).x, PNTS.get(i).y, 2,2);
+      }
   }
 
   /*

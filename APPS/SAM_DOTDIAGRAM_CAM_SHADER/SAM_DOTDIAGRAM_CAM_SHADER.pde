@@ -1,6 +1,7 @@
 /*
  * SAM JOIN THE DOTS V0.65 Camera
  * https://github.com/FreeArtBureau/SAM/tree/master/PROJET_BOBO
+ * updated : 01.03.16
  *
  */
 

@@ -1,6 +1,6 @@
 /**
  * The Agent class gives graphical feedback on drawing
- * updated 28.02.16
+ * updated 01.03.16
  */
 
 

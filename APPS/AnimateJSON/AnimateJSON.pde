@@ -1,7 +1,7 @@
 /*
  * Animate a JSON file
  * DEV : 28.02.2016 : MW
- * updated 28.02.16
+ * updated 01.03.16
  */
 
 import java.util.*;

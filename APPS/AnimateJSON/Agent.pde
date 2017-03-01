@@ -48,7 +48,7 @@ class Agent {
       hue = random(360);
       println(hue);
       clearScreen();
-      drawingYPos += 90; ///////   NOT HERE !!!
+      //drawingYPos += 90; ///////   NOT HERE !!!
     }else{
             FINISHED_DRAWING = false;
     }
@@ -75,7 +75,7 @@ class Agent {
     //VEL.limit(MAX_SPEED);
     LOC.add(VEL);
 
-    if (dist(LOC.x, LOC.y, CURRENT_POS.x, CURRENT_POS.y) <= 1.5) {
+    if (dist(LOC.x, LOC.y, CURRENT_POS.x, CURRENT_POS.y) <= 2.0) {
       LOC.set(CURRENT_POS);
       displayAgent(_x,_y,_s);
       ARRIVED = true;
@@ -85,7 +85,7 @@ class Agent {
 
   void clearScreen(){
     pg.beginDraw();
-    pg.background(237,100,7);
+    pg.background(237,100,12);
     pg.endDraw();
   }
 

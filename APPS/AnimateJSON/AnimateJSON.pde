@@ -41,27 +41,43 @@ PFont f;
 
  //////////////////////////////////////////////
  void draw(){
-   background(237,100,7);
+   background(237,100,12);
 
   //------------------------ > display last drawing BIG
    pushMatrix();
-   translate(40,100);
+   translate(40,50);
+   if(theAgents!=null){
    Agent a = (Agent)theAgents.get(theAgents.size()-1);
    a.drawAgent(SAM_DRAWING_SPEED, 0, 0, DRAW_SCALE);
-
+   a.hue+=0.5;
+   if(a.hue>=360){
+     a.hue = 0;
+   }
+ }
    Drawing theDotDrawing = theDrawings.get(theDrawings.size()-1);
-   theDotDrawing.displayDrawing(0, 0, DRAW_SCALE, 173, 2);
+   theDotDrawing.displayDrawing(0, 0, DRAW_SCALE, 97, 2.7, false);
    popMatrix();
 
-  displayTitle(100,30);
-  displayData(100, 640);
+
 
   int numDrawings = theDrawings.size();
+
       for(int i=0; i<numDrawings; i++){
+        float yPos = drawingYPos+(i*110);
         Drawing d = theDrawings.get(i);
-      d.displayDrawing(860, 40+i*90, 0.1, 267, 6);
+          d.displayDrawing(drawingXPos, yPos%600, 0.2, 157, 3, true);
+          //drawingYPos+=90;
+          //println(yPos);
+      if(yPos>height-90){
+        drawingYPos=90;
+        drawingXPos+=60;
+      }
     }
 
+    displaySAMName(100, 610);
+    displayBorders();
+    //displayTitle(100,30);
+    displayData(290, 610);
   //checkDrawingBounds();
  }
 
@@ -83,10 +99,13 @@ PFont f;
 // this function is called each time getData is called with a new file
 // in the folder directory
  void  addNewAgent(){
+      //theAgents.clear();
+      theAgents = new ArrayList<Agent>();
       Agent newDrawingAgent = new Agent(SAM_DRAWING_SPEED, 3);
       newDrawingAgent.setCoordPnts( theData.getPoints() );
       theAgents.add(newDrawingAgent);
-      drawingYPos += 90;
+      println("Agents array = "+theAgents.size());
+      //drawingYPos += 90;
   }
 
 void addNewDrawing( ArrayList<PVector> _drawingPoints ){

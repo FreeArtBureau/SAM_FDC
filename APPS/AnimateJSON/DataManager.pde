@@ -2,6 +2,7 @@
  * FUNCTIONS THAT MANAGE INCOMING DATA
  * Could implement the following : https://docs.oracle.com/javase/tutorial/essential/io/notification.html
  * as an alternative for DataLoadTask
+ *
  */
 
  File[] listOfFiles;
@@ -41,7 +42,7 @@ Timer timerLoadData;
 
      theData = new JsonData();
      theData.loadData(currentFileInUse);
-     //println("File: "+currentFileInUse);
+     println("File: "+currentFileInUse);
 
      //add a new drawing Agent
      addNewAgent();

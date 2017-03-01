@@ -1,71 +1,40 @@
-
-/*
- @INSTANCIATE
- myPrinter = new Printer();
- @MAIN METHOD, param PGraphics 
- Printer.StartPrinting(PGraphics graphicToPrint);
- */
+import java.io.*;
+import javax.print.*;
+import javax.print.attribute.*; 
+import javax.print.attribute.standard.*; 
 
 
-// @NEXT STEP : printJobAttribute to finetune the printing  
-/*
-
- aset.add(new MediaPrintableArea(2, 2, 210 - 4, 297 - 4, MediaPrintableArea.MM));
- 
- PrinterJob pj = PrinterJob.getPrinterJob();
- pj.setPrintable(new PrintTask());
- 
- if (pj.printDialog(aset)) {
- try {
- pj.print(aset);
- } 
- catch (PrinterException ex) {
- ex.printStackTrace();
- }
- }
- */
-
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.print.PageFormat;
-import java.awt.print.Printable;
-import java.awt.print.PrinterJob;
-    import javax.print.*;
-
-import javax.print.attribute.*;
-import javax.print.attribute.standard.*; //format de papier and co
-
-
-public class Printer implements Printable {
-  public PrinterJob printJob;
-     PrintRequestAttributeSet printAttribute;
-  PGraphics destination;
-  public Printer() {
-    printAttribute = new HashPrintRequestAttributeSet();
-    printAttribute.add(MediaSizeName.ISO_A4);
-    printAttribute.add(new PrinterResolution(600, 600, PrinterResolution.DPI));
-    printJob = PrinterJob.getPrinterJob();
-    printJob.setPrintable(this); //interface printable @java need it
+void Print(String _path) {
+  FileInputStream psStream = null;
+  try {
+    psStream = new FileInputStream(_path );
+  } 
+  catch (FileNotFoundException ffne) {
+    ffne.printStackTrace();
   }
-  public void StartPrinting(PGraphics _source)
-  {
-    destination = _source;
+  if (psStream == null) {
+    return;
+  }
+  DocFlavor psInFormat = DocFlavor.INPUT_STREAM.AUTOSENSE;
+  Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
+  PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+  aset.add(MediaSizeName.ISO_A4);
+  aset.add(new PrinterResolution(300, 300, PrinterResolution.DPI));
+  aset.add(OrientationRequested.LANDSCAPE);
+
+  // this step is necessary because I have several printers configured
+  PrintService myPrinter = PrintServiceLookup.lookupDefaultPrintService();
+
+
+  if (myPrinter != null) {            
+    DocPrintJob job = myPrinter.createPrintJob();
     try {
-      printJob.print(printAttribute);
+      job.print(myDoc, aset);
+    } 
+    catch (Exception pe) {
+      pe.printStackTrace();
     }
-    catch (Exception PrintException) {
-      PrintException.printStackTrace();
-    }
+  } else {
+    System.out.println("no printer services found");
   }
-
-  public int print(Graphics pg, PageFormat pageFormat, int page) {
-    pageFormat.setOrientation(PORTRAIT);
-    Graphics2D g2d;
-    if (page == 0) {
-      g2d = (Graphics2D)pg;
-      pg.drawImage(destination.image, 0, 0, null); // Java AWT Image Object caché ds le PGraphics
-      return (PAGE_EXISTS);
-    } else
-      return (NO_SUCH_PAGE);
-  }
-} 
+}

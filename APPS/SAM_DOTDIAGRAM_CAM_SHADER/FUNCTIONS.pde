@@ -38,7 +38,7 @@ void computeDiagrams() {
 
 ////////////////////////////////////////
 void compute() {
-  filterVisage(blurlvl, thresh);
+  //filterVisage(blurlvl, thresh);
   applyCanny(CANNY_THRESH);
   computeBlobs();
   computeDiagrams();
@@ -177,4 +177,9 @@ void keyPressed() {
     isJsonExport = !isJsonExport;
     bExportPDF = !bExportPDF;
   }
+  if(key == 'a'){
+ println(img.width);
+ println(img.height);
+
+}
 }

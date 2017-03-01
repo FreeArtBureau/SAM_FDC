@@ -26,7 +26,7 @@ int levels = 2;
 physicalButton theButton = new physicalButton(this, 2);
 BlobDetection[] theBlobDetection = new BlobDetection[int(levels)];
 DotDiagram[] theDiagrams;
-Printer thePrinter = new Printer();
+//Printer thePrinter = new Printer();
 
 Capture cam;
 PImage img;
@@ -38,7 +38,6 @@ TSP myTSP;
 //////////////////////////////////////////////
 
 void settings() {
-  img = new PImage(80, 60);
 
   // for infos resolution IMAC 2009 = 1680 x 1050
   // so screen ratio = 1.6
@@ -49,43 +48,24 @@ void settings() {
 
 //////////////////////////////////////////////
 void setup() {
-  //  img = new PImage(80, 60);
-  //  size(800, 600, P3D);
-  background(255);
-  myTSP = new TSP();
-  filterSkelt = new SkeletonFilter();
-  //visage = loadImage("picasso_thumb.jpg");
-
 
   colorMode(HSB, 360, 100, 100);
-  shaderBlur = loadShader("blur.glsl");
-  canny = loadShader("canny.glsl");
-  refine = loadShader("refine.glsl");
 
-  refine.set("texelWidth", 1.0);
-  refine.set("texelHeight", 1.0);
-  refine.set("upperThreshold", 1.0);
-  refine.set("lowerThreshold", 0.01);
-
-  //  shaderBlur.set("blurSize", 2);
-  //  shaderBlur.set("sigma", 2.5);
-
+  myTSP = new TSP();
   DATA = new JsonData(0);
-  //jsonFileIndex = 0;
+
   cam = new Capture(this, 40*4, 30*4, 15);
   cam.start();
-  //img = new PImage(80, 60);
   initGUI();
-  compute();
+  img=new PImage( 40*4, 30*4);
 }
 
 //////////////////////////////////////////////
 void draw() {
-  //background(0);
   background(0, 0, 100);
   if (cam.available() == true) {
-    //background(0);
     cam.read();
+    img.copy(cam, 0, 0, cam.width, cam.height, 0, 0, img.width, img.height);
   }
 
   if (bDrawImage) {
@@ -93,8 +73,6 @@ void draw() {
   }
 
   compute();
-  img.copy(cam, 0, 0, cam.width, cam.height, 
-    0, 0, img.width, img.height);
 
 
   if (bDrawContours) {
@@ -107,7 +85,7 @@ void draw() {
   //-------------------- > we only want to export the diagram for the printer ;–)
   if (bExportPDF)
   {
-    beginRecord(PDF, "/Users/tisane/Google Drive/Pomp_Files/toPrint/SAM_diagram_"+getTime()+".pdf");
+    beginRecord(PDF, getTime()+".pdf");
     //("/Users/markwebster/Desktop/toPrint/..."); > the address
     //colorMode(HSB, 360, 100, 100);
   }
@@ -142,7 +120,6 @@ void draw() {
 
   if (theButton.isClick()) {
     takePicture();
-
   }
 
 
@@ -158,17 +135,32 @@ void draw() {
 
 void takePicture() {
   println("taking a picture");
-  thePrinter.StartPrinting(joinTheDotA4());
-
+  String pdfFileName = joinTheDotA4();
+  Print(sketchPath()+"/PDF/" + pdfFileName + ".pdf");
 }
 
-PGraphics joinTheDotA4() {
-  PGraphics joinTheDotA4 = createGraphics(595, 842);
-  joinTheDotA4.beginDraw();
-  //joinTheDotA4.fill(255, 0, 0);
-  //joinTheDotA4.rect(100, 100, 40, 40);
-  println(this);
-  joinTheDotA4.copy(g, 0, 0, width, height, 0, 0, joinTheDotA4.width, joinTheDotA4.height);
-  joinTheDotA4.endDraw();
-  return joinTheDotA4;
+String joinTheDotA4() {
+  String fileName =  getTime() ;
+  int itemIndex = (int)s1.getValue();
+  String algorithm = algorithms[ itemIndex ];
+  pushMatrix();
+
+  beginRecord(PDF, "PDF/" + fileName + ".pdf");
+  translate(width/2, height/2);
+  scale(0.6);
+  translate(-width/2, -height/2);
+  stroke(0);
+  rect(0, 0, width, height);
+
+  colorMode(HSB, 360, 100, 100, 100); //needs to be set for PDF  
+  if (theDiagrams != null) {
+    for (int i=0; i<theDiagrams.length; i++) {
+      theDiagrams[i].compute(numDots, 20, algorithm); // 10 : SIMPLE [best]
+      theDiagrams[i].displayDotDiagram(lineThresh, true, bDrawDiagramDotNumbers, i);
+    }
+  }
+  endRecord();
+  pushMatrix();
+
+  return fileName;
 }

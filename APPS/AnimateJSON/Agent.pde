@@ -1,6 +1,6 @@
 /**
  * The Agent class gives graphical feedback on drawing
- * updated 01.03.16
+ * updated : 01.03.16
  */
 
 
@@ -75,7 +75,7 @@ class Agent {
     //VEL.limit(MAX_SPEED);
     LOC.add(VEL);
 
-    if (dist(LOC.x, LOC.y, CURRENT_POS.x, CURRENT_POS.y) <= 2.0) {
+    if (dist(LOC.x, LOC.y, CURRENT_POS.x, CURRENT_POS.y) <= 3.3) {
       LOC.set(CURRENT_POS);
       displayAgent(_x,_y,_s);
       ARRIVED = true;

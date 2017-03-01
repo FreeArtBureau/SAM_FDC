@@ -1,7 +1,7 @@
 /*
  * Animate a JSON file
  * DEV : 28.02.2016 : MW
- * updated 01.03.16
+ * updated : 01.03.16
  */
 
 import java.util.*;
@@ -11,12 +11,13 @@ import java.io.FilenameFilter;
 
 JsonData theData;
 //String filePath = "/Users/tisane/Google Drive/SAM GOES TO BEAUBOURG/SAM_BEAUBOURG_JSON/";
-String filePath = "/Users/tisane/Desktop/JSON/";
+//String filePath = "/Users/tisane/Desktop/JSON/";
+String filePath = "/Users/tisane/Google Drive/Pomp_Files/json/";
 
 File folder = new File(filePath);
 float periodLoadData = 30.0; // seconds
 float SAM_DRAWING_SPEED = 2.8;
-float DRAW_SCALE = 0.8;
+float DRAW_SCALE = 0.6;
 ArrayList<Agent> theAgents;
 ArrayList<Drawing> theDrawings;
 float drawingYPos, drawingXPos;
@@ -46,7 +47,7 @@ PFont f;
   //------------------------ > display last drawing BIG
    pushMatrix();
    translate(40,50);
-   if(theAgents!=null){
+   if(theAgents.size()>0){
    Agent a = (Agent)theAgents.get(theAgents.size()-1);
    a.drawAgent(SAM_DRAWING_SPEED, 0, 0, DRAW_SCALE);
    a.hue+=0.5;
@@ -55,7 +56,7 @@ PFont f;
    }
  }
    Drawing theDotDrawing = theDrawings.get(theDrawings.size()-1);
-   theDotDrawing.displayDrawing(0, 0, DRAW_SCALE, 97, 2.7, false);
+   theDotDrawing.displayDrawing(0, 0, DRAW_SCALE, 97, 1.7, false);
    popMatrix();
 
 
@@ -65,7 +66,7 @@ PFont f;
       for(int i=0; i<numDrawings; i++){
         float yPos = drawingYPos+(i*110);
         Drawing d = theDrawings.get(i);
-          d.displayDrawing(drawingXPos, yPos%600, 0.2, 157, 3, true);
+          d.displayDrawing(drawingXPos, yPos%600, 0.1, 157, 2, true);
           //drawingYPos+=90;
           //println(yPos);
       if(yPos>height-90){

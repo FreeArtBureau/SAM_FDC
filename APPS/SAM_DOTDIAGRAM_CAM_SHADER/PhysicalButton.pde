@@ -49,15 +49,13 @@ class physicalButton {
 
   //retrive the messages from the serial and 
   boolean isClick() {  
-    boolean click = false;
     if ( myPort.available() > 0) {  // If data is available,
       int val = myPort.read();
       if (val=='p' && hasFinished() && canClick) {
-        println("pressed");
         lastClick = millis();
-        return click;
+        return true;
       }
     }
-    return click;
+    return false;
   }
 }

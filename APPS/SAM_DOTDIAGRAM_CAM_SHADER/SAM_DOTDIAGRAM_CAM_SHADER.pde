@@ -23,8 +23,11 @@ int numberPoints;
 int factor = 14; // image size
 int levels = 2;
 
+physicalButton theButton = new physicalButton(this, 2);
 BlobDetection[] theBlobDetection = new BlobDetection[int(levels)];
 DotDiagram[] theDiagrams;
+Printer thePrinter = new Printer();
+
 Capture cam;
 PImage img;
 //String direct = "/Users/markwebster/Desktop/toPrint";
@@ -36,14 +39,18 @@ TSP myTSP;
 
 void settings() {
   img = new PImage(80, 60);
+
+  // for infos resolution IMAC 2009 = 1680 x 1050
+  // so screen ratio = 1.6
   //visage = loadImage("picasso_thumb.jpg");
+  //fullScreen(P3D);
   size(80*factor, 60*factor, P3D);
 }
 
 //////////////////////////////////////////////
 void setup() {
-//  img = new PImage(80, 60);
-//  size(800, 600, P3D);
+  //  img = new PImage(80, 60);
+  //  size(800, 600, P3D);
   background(255);
   myTSP = new TSP();
   filterSkelt = new SkeletonFilter();
@@ -60,8 +67,8 @@ void setup() {
   refine.set("upperThreshold", 1.0);
   refine.set("lowerThreshold", 0.01);
 
-//  shaderBlur.set("blurSize", 2);
-//  shaderBlur.set("sigma", 2.5);
+  //  shaderBlur.set("blurSize", 2);
+  //  shaderBlur.set("sigma", 2.5);
 
   DATA = new JsonData(0);
   //jsonFileIndex = 0;
@@ -75,18 +82,18 @@ void setup() {
 //////////////////////////////////////////////
 void draw() {
   //background(0);
-  background(0,0,100);
+  background(0, 0, 100);
   if (cam.available() == true) {
     //background(0);
     cam.read();
- }
+  }
 
- if (bDrawImage) {
-   image(cam, 0, 0, width, height);
- }
+  if (bDrawImage) {
+    image(cam, 0, 0, width, height);
+  }
 
   compute();
-  img.copy(cam, 0, 0, cam.width, cam.height,
+  img.copy(cam, 0, 0, cam.width, cam.height, 
     0, 0, img.width, img.height);
 
 
@@ -107,31 +114,37 @@ void draw() {
 
   if (bDrawDiagram) {
     try {
-    // get string value from ScrollableList
-    int itemIndex = (int)s1.getValue();
-    String algorithm = algorithms[ itemIndex ];
+      // get string value from ScrollableList
+      int itemIndex = (int)s1.getValue();
+      String algorithm = algorithms[ itemIndex ];
 
-    if(theDiagrams != null) {
-    for (int i=0; i<theDiagrams.length; i++) {
-      theDiagrams[i].compute(numDots, 20, algorithm); // 10 : SIMPLE [best]
-      theDiagrams[i].displayDotDiagram(lineThresh, bDrawDiagramLines, bDrawDiagramDotNumbers, i);
-   }
-   if(isJsonExport){
-    calculateJSON(levels, isJsonExport);
-    isJsonExport = false;
+      if (theDiagrams != null) {
+        for (int i=0; i<theDiagrams.length; i++) {
+          theDiagrams[i].compute(numDots, 20, algorithm); // 10 : SIMPLE [best]
+          theDiagrams[i].displayDotDiagram(lineThresh, bDrawDiagramLines, bDrawDiagramDotNumbers, i);
+        }
+        if (isJsonExport) {
+          calculateJSON(levels, isJsonExport);
+          isJsonExport = false;
+        }
+        calculateTotalDiaPoints(levels);
+      }
+    }
+    catch(Exception e) {
+      //println("...trying to change preset...");
+    }
   }
-    calculateTotalDiaPoints(levels);
-  }
-}
-  catch(Exception e) {
-    //println("...trying to change preset...");
-  }
-}
 
-  if (bExportPDF){
+  if (bExportPDF) {
     endRecord();
     bExportPDF = false;
   }
+
+  if (theButton.isClick()) {
+    takePicture();
+
+  }
+
 
   if (isGUI) {
     cp5.show();
@@ -141,3 +154,21 @@ void draw() {
   cp5.draw();
 }
 /////////////////////////////////////////////////////
+
+
+void takePicture() {
+  println("taking a picture");
+  thePrinter.StartPrinting(joinTheDotA4());
+
+}
+
+PGraphics joinTheDotA4() {
+  PGraphics joinTheDotA4 = createGraphics(595, 842);
+  joinTheDotA4.beginDraw();
+  //joinTheDotA4.fill(255, 0, 0);
+  //joinTheDotA4.rect(100, 100, 40, 40);
+  println(this);
+  joinTheDotA4.copy(g, 0, 0, width, height, 0, 0, joinTheDotA4.width, joinTheDotA4.height);
+  joinTheDotA4.endDraw();
+  return joinTheDotA4;
+}

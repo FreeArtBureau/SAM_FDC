@@ -16,9 +16,10 @@ PShader shaderBlur, canny, refine;
 
 JsonData DATA;
 boolean isJsonExport = false;
-String filePath = "/Users/tisane/Google Drive/Pomp_Files/json/TEST_01/";
+String filePath = "/Users/tisane/Google Drive/Pomp_Files/json/";
+//String filePath = "/Users/tisane/Desktop/JSON/";
 int numberPoints;
-int factor = 10; // image size
+int factor = 14; // image size
 int levels = 2;
 
 BlobDetection[] theBlobDetection = new BlobDetection[int(levels)];
@@ -42,7 +43,7 @@ void settings() {
 void setup() {
 //  img = new PImage(80, 60);
 //  size(800, 600, P3D);
-  background(0);
+  background(255);
   myTSP = new TSP();
   filterSkelt = new SkeletonFilter();
   //visage = loadImage("picasso_thumb.jpg");
@@ -72,7 +73,8 @@ void setup() {
 
 //////////////////////////////////////////////
 void draw() {
-  background(0);
+  //background(0);
+  background(0,0,100);
   if (cam.available() == true) {
     //background(0);
     cam.read();
@@ -81,13 +83,6 @@ void draw() {
  if (bDrawImage) {
    image(cam, 0, 0, width, height);
  }
-
-  if (bExportPDF)
-  {
-    beginRecord(PDF, "/Users/tisane/Google Drive/Pomp_Files/toPrint/theCapture_"+getTime()+".pdf");
-    //("/Users/markwebster/Desktop/toPrint/..."); > the address
-    //colorMode(HSB, 360, 100, 100);
-  }
 
   compute();
   img.copy(cam, 0, 0, cam.width, cam.height,
@@ -100,7 +95,15 @@ void draw() {
       drawContours(i);
     }
   }
-//}
+
+  //-------------------- > we only want to export the diagram for the printer ;–)
+  if (bExportPDF)
+  {
+    beginRecord(PDF, "/Users/tisane/Google Drive/Pomp_Files/toPrint/SAM_diagram_"+getTime()+".pdf");
+    //("/Users/markwebster/Desktop/toPrint/..."); > the address
+    //colorMode(HSB, 360, 100, 100);
+  }
+
   if (bDrawDiagram) {
     try {
     // get string value from ScrollableList

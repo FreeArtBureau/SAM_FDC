@@ -6,7 +6,7 @@
 
 //////////////////////////////////////////////////
 // >> Globals shared with this class
-int STRATEGY_INDEX = 3;
+int STRATEGY_INDEX = 4;
 boolean FIRST_COORD, DRAWING, SHOW_STRATEGY, PAUSED;
 //boolean LIVE = true;
 

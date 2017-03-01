@@ -8,6 +8,8 @@
 // >> Globals shared with this class
 float THRESH_MAX; // needs to be an interface var
 float MAX_SPEED;
+float imgOffsetX = 15;
+float imgOffsetY = 15;
 
 ////////////////////////////////////
 
@@ -45,7 +47,7 @@ class Machine {
   void initMachine() {
     Z_CAL = 0;
     Z_DIST = 0;
-    Z_DIFF = 7;
+    Z_DIFF = 30;
     LOC = new PVector(0, 0);
     VEL = new PVector(0, 0);
     CURRENT_POS = new PVector();
@@ -60,6 +62,8 @@ class Machine {
     DRAWING = false;
 
     bStart = false;
+    imgOffsetX*=PIXEL_SCALE;
+    imgOffsetY*=PIXEL_SCALE;
   }
 
   ///////////////////////////////////////////////////////// MAIN METHODS FOR MOVING
@@ -131,7 +135,7 @@ class Machine {
     LOC.add(VEL);
 
     //float
-    if (dist(LOC.x, LOC.y, CURRENT_POS.x, CURRENT_POS.y) <= 1.5)
+    if (dist(LOC.x, LOC.y, CURRENT_POS.x, CURRENT_POS.y) <= 3.5)
     {
       LOC.set(CURRENT_POS);
       penDown();
@@ -290,18 +294,18 @@ class Machine {
     }
 
     if (keyCode == RIGHT) {
-      LOC.x+=50;
+      LOC.x+=imgOffsetX;
     }
 
     if (keyCode == LEFT) {
-      LOC.x-=50;
+      LOC.x-=imgOffsetX;
     }
 
     if (keyCode == UP) {
-      LOC.y-=50;
+      LOC.y-=imgOffsetY;
     }
     if (keyCode == DOWN) {
-      LOC.y+=50;
+      LOC.y+=imgOffsetY;
     }
   }
 }

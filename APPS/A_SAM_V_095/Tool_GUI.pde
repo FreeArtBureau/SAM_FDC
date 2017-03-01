@@ -171,6 +171,7 @@ void DrawingStrategy(int n){
   APP.initApp();
   INTERFACES.get(ScrollableList.class, "DrawingStrategy").getItem(n);
   APP.CURRENT_DS = APP.theStrategies.get( n );
+  STRATEGY_INDEX = n;
 }
 
 /////////////////////////////////////////// IMAGE SELECTION FROM PUTER

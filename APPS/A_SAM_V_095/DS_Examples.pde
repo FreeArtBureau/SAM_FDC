@@ -9,6 +9,8 @@
 // >> Globals shared with these classes
 int SEGMENT;
 int INTERVALLE;
+String FILE_DIR = "/Users/markwebster/Google Drive/Pomp_Files/json/";
+String JSONFileName = "SAM_dessin_11_20_41.json";
 
 
 public class FreeDraw extends DrawingStrategy {
@@ -288,8 +290,8 @@ public class AnneAlgo extends DrawingStrategy {
 
     void loadData(int _id) {
       idIndex = _id;
-      //values = loadJSONObject("data/jsonDataPortraits.json");
-      values = loadJSONObject("jsonDataPortraits.json");
+      values = loadJSONObject(FILE_DIR+JSONFileName);
+      //values = loadJSONObject("jsonDataPortraits.json");
       //println(values);
       println("JSON data loaded ;–)");
     }

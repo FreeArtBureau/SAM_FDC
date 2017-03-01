@@ -14,7 +14,7 @@ class SamSerialData {
 
   SamSerialData(PApplet p5) {
     this.p5 = p5;
-    PIXEL_SCALE = 15; // !!!!!!! should be a global somewhere for this too - put with speed variable
+    PIXEL_SCALE = 5; // !!!!!!! should be a global somewhere for this too - put with speed variable
     SAM_X = 0;
     SAM_Y = 0;
     SAM_Z = 0;

@@ -1,6 +1,7 @@
 /*
  * Displays a join the dot diagram
  * Added Canny
+ * updated : 01.03.16
  */
 
 
@@ -232,17 +233,25 @@ void calculateTotalDiaPoints(int _levels){
 void calculateJSON(int _levels, boolean _b){
   ArrayList<PVector> ALL_PNTS = new ArrayList<PVector>(); // all points
   levels = _levels;
+  /*
   for(int i=1; i<_levels; i++) {
     for(int j=0;j<theDiagrams[i].FILTER_PNTS.size();j++){
     ALL_PNTS.add(theDiagrams[i].FILTER_PNTS.get(j));
     }
   }
+*/
+  //ArrayList<PVector> points = new ArrayList<PVector>();
+  for (int i=0; i<_levels; i++) {
+    ALL_PNTS.addAll( getPVectorFromBlobDetection( theBlobDetection[i] ) );
+}
+
+  if(CANNY){
   myTSP.applyTSP(getBlackPoints());
   for(int i=0; i<myTSP.SAVED_PNTS.size();i++){
     PVector cannyPoints = myTSP.SAVED_PNTS.get(i);
     ALL_PNTS.add(cannyPoints);
   }
-
+}
     DATA.setData(ALL_PNTS, _levels, _b);
 
 }

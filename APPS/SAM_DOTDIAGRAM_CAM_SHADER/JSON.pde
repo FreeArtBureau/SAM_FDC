@@ -1,5 +1,6 @@
 /*
  * READS JSON FILES
+ * updated : 01.03.16
  */
 
 class JsonData {
@@ -41,7 +42,7 @@ class JsonData {
     //coordinates.setJSONObject(idIndex, portrait);
     if (isSave) {
       String jsonTimeFile = getTime(); // getting current timestamp !
-      saveJSONObject(json, filePath+"jsonDataPortraits_" + jsonTimeFile+ ".json");
+      saveJSONObject(json, filePath+"SAM_dessin_" + jsonTimeFile+ ".json");
       println("SAVED JSON");
       //jsonFileIndex++;
     }

@@ -1,6 +1,7 @@
 /*
  * A list of functions
  * Added Canny
+ * updated : 01.03.16
  */
 
 ////////////////////////////////////////
@@ -24,11 +25,7 @@ void computeDiagrams() {
   if (bComputeGlobalDiagram) {
     theDiagrams = new DotDiagram[1];
     theDiagrams[0] = new DotDiagram();
-    ArrayList<PVector> points = new ArrayList<PVector>();
-    for (int i=0; i<levels; i++)
-      points.addAll( getPVectorFromBlobDetection( theBlobDetection[i] ) );
-      theDiagrams[0].setDiagramPoints( points );
-  }
+}
   else{
     theDiagrams = new DotDiagram[(int)levels];
     for (int i=0; i<levels; i++) {
@@ -128,10 +125,10 @@ void applyCanny(float _thresh){
   }
 }
 
-////////////////////////////////////////
+//////////////////////////////////////// NB : use kk instead of hh for 24hour time
 String getTime() {
   Date dNow = new Date( );
-  SimpleDateFormat time = new SimpleDateFormat ("hh"+"_"+"mm"+"_"+"ss");
+  SimpleDateFormat time = new SimpleDateFormat ("kk"+"_"+"mm"+"_"+"ss");
   println(time.format(dNow));
   String t = time.format(dNow);
   return t;
@@ -178,5 +175,6 @@ void keyPressed() {
   }
   if(key == 'p'){
     isJsonExport = !isJsonExport;
+    bExportPDF = !bExportPDF;
   }
 }

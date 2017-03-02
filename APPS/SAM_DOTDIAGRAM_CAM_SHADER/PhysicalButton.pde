@@ -11,7 +11,7 @@
  void draw()
  {
  if(button.isClick()){
- println("take a picture");
+
  }
  }
  
@@ -23,7 +23,7 @@ class physicalButton {
 
   Serial myPort;
   boolean canClick = true; //boolean to activate / desactivate
-  int WAIT_TIME = 3500; // duration between next activation
+  int WAIT_TIME = 30000; // duration between next activation in millisec
   int lastClick; 
 
 

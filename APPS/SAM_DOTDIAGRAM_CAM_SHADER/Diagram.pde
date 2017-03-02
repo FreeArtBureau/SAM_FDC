@@ -242,7 +242,7 @@ void calculateJSON(int _levels, boolean _b){
 */
   //ArrayList<PVector> points = new ArrayList<PVector>();
   for (int i=0; i<_levels; i++) {
-    ALL_PNTS.addAll( getPVectorFromBlobDetection( theBlobDetection[i] ) );
+    ALL_PNTS.addAll( getPVectorFromBlobDetection( theBlobDetection[i],height,height ) );
 }
 
   if(CANNY){

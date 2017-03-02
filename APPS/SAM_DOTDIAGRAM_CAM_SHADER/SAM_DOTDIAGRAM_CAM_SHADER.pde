@@ -34,7 +34,7 @@ PImage img;
 String TIME;
 TSP myTSP;
 //boolean newFrame=false;
-
+int BLOB_FACTOR_X, BLOB_FACTOR_Y;
 //////////////////////////////////////////////
 
 void settings() {
@@ -42,8 +42,9 @@ void settings() {
   // for infos resolution IMAC 2009 = 1680 x 1050
   // so screen ratio = 1.6
   //visage = loadImage("picasso_thumb.jpg");
-  //fullScreen(P3D);
-  size(80*factor, 60*factor, P3D);
+  fullScreen(P3D);
+  
+  //size(96*factor, 60*factor, P3D);
 }
 
 //////////////////////////////////////////////
@@ -57,7 +58,9 @@ void setup() {
   cam = new Capture(this, 40*4, 30*4, 15);
   cam.start();
   initGUI();
-  img=new PImage( 40*4, 30*4);
+  img=new PImage( 30*4, 30*4);
+  BLOB_FACTOR_X = height;
+  BLOB_FACTOR_Y = height;
 }
 
 //////////////////////////////////////////////
@@ -65,7 +68,7 @@ void draw() {
   background(0, 0, 100);
   if (cam.available() == true) {
     cam.read();
-    img.copy(cam, 0, 0, cam.width, cam.height, 0, 0, img.width, img.height);
+    img.copy(cam, (cam.width-cam.height)/2, 0, cam.height, cam.height, 0, 0, img.width, img.height);
   }
 
   if (bDrawImage) {
@@ -74,14 +77,16 @@ void draw() {
 
   compute();
 
-
   if (bDrawContours) {
+    pushMatrix();
+    translate(width/2 - BLOB_FACTOR_X/2, 0);
+
     for (int i=0; i<levels; i++) {
       //theBlobDetection[i].computeBlobs(img.pixels);
-      drawContours(i);
+      drawContours(i, BLOB_FACTOR_X, BLOB_FACTOR_Y, 0, 0);
     }
+    popMatrix();
   }
-
   //-------------------- > we only want to export the diagram for the printer ;–)
   if (bExportPDF)
   {
@@ -97,10 +102,13 @@ void draw() {
       String algorithm = algorithms[ itemIndex ];
 
       if (theDiagrams != null) {
+        pushMatrix();
+        translate(width/2 - BLOB_FACTOR_X/2, 0);
         for (int i=0; i<theDiagrams.length; i++) {
           theDiagrams[i].compute(numDots, 20, algorithm); // 10 : SIMPLE [best]
           theDiagrams[i].displayDotDiagram(lineThresh, bDrawDiagramLines, bDrawDiagramDotNumbers, i);
         }
+        popMatrix();
         if (isJsonExport) {
           calculateJSON(levels, isJsonExport);
           isJsonExport = false;
@@ -154,6 +162,8 @@ String joinTheDotA4() {
 
   colorMode(HSB, 360, 100, 100, 100); //needs to be set for PDF  
   if (theDiagrams != null) {
+            translate(width/2 - BLOB_FACTOR_X/2, 0);
+
     for (int i=0; i<theDiagrams.length; i++) {
       theDiagrams[i].compute(numDots, 20, algorithm); // 10 : SIMPLE [best]
       theDiagrams[i].displayDotDiagram(lineThresh, true, bDrawDiagramDotNumbers, i);

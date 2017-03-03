@@ -17,6 +17,7 @@ import java.util.*;
 JsonData DATA;
 boolean isJsonExport = false;
 String filePath ; //= sketchPath()+"/JSON/";
+//String filePath;
 //String filePath = "/Users/tisane/Desktop/JSON/";
 
 int numberPoints;
@@ -26,6 +27,10 @@ int levels = 2;
 physicalButton theButton = new physicalButton(this, 2);
 BlobDetection[] theBlobDetection = new BlobDetection[int(levels)];
 DotDiagram[] theDiagrams;
+
+PFont mono ;
+// The font "andalemo.ttf" must be located in the 
+// current sketch's "data" directory to load successfully
 
 Capture cam;
 PImage img;
@@ -41,11 +46,13 @@ void settings() {
   // for infos resolution IMAC 2009 = 1680 x 1050
   // so screen ratio = 1.6
   //fullScreen(P3D);
-  size(96*factor, 60*factor, P3D);
+  size(1680, 1050, P3D);
 }
 
 //////////////////////////////////////////////
 void setup() {
+  mono = createFont("mono.ttf", 140);
+  textFont(mono);
 
   filePath = sketchPath()+"/JSON/";
 
@@ -130,9 +137,13 @@ void draw() {
 
   if (theButton.isClick()) {
     takePicture();
-  } else {
+  } 
+
+
+  if (theButton.hasFinished() == false) {
     displayWait();
   }
+
   displayBorders();
 
   if (isGUI) {
@@ -149,7 +160,7 @@ void takePicture() {
   println("taking a picture");
   calculateJSON(levels, true);
   String pdfFileName = joinTheDotA4();
-  Print(sketchPath()+"/PDF/" + pdfFileName + ".pdf");
+  //Print(sketchPath()+"/PDF/" + pdfFileName + ".pdf");
 }
 
 String joinTheDotA4() {
@@ -160,7 +171,7 @@ String joinTheDotA4() {
   pushMatrix();
 
   beginRecord(PDF, "PDF/" + fileName + ".pdf");
-  background(255);
+  //background(255);
   translate(width/2, height/2);
   scale(0.6);
   translate(-width/2, -height/2);
@@ -175,6 +186,7 @@ String joinTheDotA4() {
     }
   }
   endRecord();
+  background(0, 0, 0);
   pushMatrix();
 
   return fileName;
@@ -182,10 +194,25 @@ String joinTheDotA4() {
 
 
 void displayWait() {
-  String merci = "╔╦╗╔═╗╦═╗╔═╗╦║║║║╣ ╠╦╝║  ║╩ ╩╚═╝╩╚═╚═╝╩";
-  text(merci, 0, 5);
-  textSize(20);
+  background(0, 100, 0);
+  fill(0, 0, 100);
+  //String merci = "╔╦╗╔═╗╦═╗╔═╗╦\n║║║║╣ ╠╦╝║  ║\n╩ ╩╚═╝╩╚═╚═╝╩";
+  String merci = "Merci \nvotre dessin s'imprime !";
+  textFont(mono);
+  textAlign(CENTER);
+  textSize(50);
+
+  //text(merci, 0, 100,width,height);
+
+  float cd = 0.0;
+  cd  =  millis() - theButton.lastClick ;
+  println(theButton.WAIT_TIME/1000 - cd/1000);
+  String w = ""+ nf(theButton.WAIT_TIME/1000 - cd/1000, 2, 1);
+  text(merci, 0, 500, width, height);
 }
+
+
+
 
 void displayBorders() {
   float dotSize = 5;
@@ -228,8 +255,39 @@ void displayBorders() {
     }
     ellipse(40, y+yOffset, dotSize, dotSize);
   }
+
   pushMatrix();
   translate(width-80, 0);
+  for (int y=40; y<height-40; y+=15) {
+    float h = map(y, 0, height-40, 1, 360);
+    fill(h, 100, 100);
+    if (y%2==0) {
+      yOffset=5;
+    } else {
+      yOffset=-5;
+    }
+    ellipse(40, y+yOffset, dotSize, dotSize);
+  }
+  popMatrix();
+
+
+
+  pushMatrix();
+  translate(width-320, 0);
+  for (int y=40; y<height-40; y+=15) {
+    float h = map(y, 0, height-40, 1, 360);
+    fill(h, 100, 100);
+    if (y%2==0) {
+      yOffset=5;
+    } else {
+      yOffset=-5;
+    }
+    ellipse(40, y+yOffset, dotSize, dotSize);
+  }
+  popMatrix();
+
+  pushMatrix();
+  translate(240, 0);
   for (int y=40; y<height-40; y+=15) {
     float h = map(y, 0, height-40, 1, 360);
     fill(h, 100, 100);

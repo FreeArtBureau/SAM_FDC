@@ -233,6 +233,7 @@ void calculateTotalDiaPoints(int _levels) {
 void calculateJSON(int _levels, boolean _b) {
   ArrayList<PVector> ALL_PNTS = new ArrayList<PVector>(); // all points
   levels = _levels;
+  DATA = new JsonData(0);
   /*
   for(int i=1; i<_levels; i++) {
    for(int j=0;j<theDiagrams[i].FILTER_PNTS.size();j++){

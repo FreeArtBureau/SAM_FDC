@@ -23,9 +23,9 @@ class physicalButton {
 
   Serial myPort;
   boolean canClick = true; //boolean to activate / desactivate
-  int WAIT_TIME = 30000; // duration between next activation in millisec
-  int lastClick; 
-
+  int WAIT_TIME = 10000; // duration between next activation in millisec
+  int lastClick= -WAIT_TIME; 
+boolean ready = true;
 
   physicalButton (PApplet _main, int portIndex) {  
     printArray(Serial.list());

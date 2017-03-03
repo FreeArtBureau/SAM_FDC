@@ -148,6 +148,8 @@ void keyReleased() {
   if (key == 'p') {
     //isJsonExport = !isJsonExport;
         takePicture();
+        theButton.lastClick = millis();
+
     //bExportPDF = !bExportPDF;
   }
   if (key == 'a') {

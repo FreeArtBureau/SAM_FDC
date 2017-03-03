@@ -16,17 +16,12 @@ import java.util.*;
 
 JsonData DATA;
 boolean isJsonExport = false;
-//String filePath ; //= sketchPath()+"/JSON/";
 
 //IMAC VIGO
 //String filePath= "/Users/esad/Google Drive/SAM_BEAUBOURG_JSON/";
-
 //MACPRO VIGO
-String filePath= "/Users/vjm/Google Drive/SAM GOES TO BEAUBOURG/SAM_BEAUBOURG_JSON";
-
+String filePath = "/Users/vjm/Google Drive/SAM GOES TO BEAUBOURG/SAM_SHARE";
 String fileName ;
-
-//String filePath = "";
 
 int numberPoints;
 int factor = 14; // image size
@@ -42,9 +37,7 @@ PFont mono, monoSmall;
 
 Capture cam;
 PImage img;
-//String direct = "/Users/markwebster/Desktop/toPrint";
 String TIME;
-//boolean newFrame=false;
 int BLOB_FACTOR_X, BLOB_FACTOR_Y;
 //////////////////////////////////////////////
 
@@ -156,9 +149,8 @@ void draw() {
 void takePicture() {
   fileName = getTime();
   println("taking a picture");
-  //saveFrame(filePath + "/"+fileName+".png");
-
-  //calculateJSON(levels, true);
+  saveFrame(filePath + "/PNG/"+fileName+".png");
+  calculateJSON(levels, true);
   joinTheDotA4();
   Print(sketchPath()+"/PDF/" + fileName + ".pdf");
 }

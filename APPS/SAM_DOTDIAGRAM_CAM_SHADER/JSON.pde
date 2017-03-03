@@ -42,7 +42,7 @@ class JsonData {
     //coordinates.setJSONObject(idIndex, portrait);
     if (isSave) {
       String jsonTimeFile = getTime(); // getting current timestamp !
-      saveJSONObject(json, filePath+"SAM_dessin_" + fileName+ ".json");
+      saveJSONObject(json, filePath+"/JSON/SAM_dessin_" + fileName+ ".json");
       println("SAVED JSON");
       //jsonFileIndex++;
     }

@@ -31,7 +31,7 @@ class physicalButton {
     printArray(Serial.list());
     String portName = Serial.list()[portIndex];
     myPort = new Serial(_main, portName, 9600);
-    delay(2000); //weird fasle positive on startup
+    //delay(2000); //weird fasle positive on startup
     myPort.clear();
   }
 

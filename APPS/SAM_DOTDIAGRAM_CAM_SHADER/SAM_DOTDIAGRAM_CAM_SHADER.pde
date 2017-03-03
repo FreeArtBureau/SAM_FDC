@@ -13,12 +13,12 @@ import java.text.*;
 import java.util.*;
 
 ////////////////////////////////////////
-PShader shaderBlur, canny, refine;
 
 JsonData DATA;
 boolean isJsonExport = false;
-String filePath = "/Users/tisane/Google Drive/Pomp_Files/json/";
+String filePath ; //= sketchPath()+"/JSON/";
 //String filePath = "/Users/tisane/Desktop/JSON/";
+
 int numberPoints;
 int factor = 14; // image size
 int levels = 2;
@@ -26,7 +26,6 @@ int levels = 2;
 physicalButton theButton = new physicalButton(this, 2);
 BlobDetection[] theBlobDetection = new BlobDetection[int(levels)];
 DotDiagram[] theDiagrams;
-//Printer thePrinter = new Printer();
 
 Capture cam;
 PImage img;
@@ -41,14 +40,14 @@ void settings() {
 
   // for infos resolution IMAC 2009 = 1680 x 1050
   // so screen ratio = 1.6
-  //visage = loadImage("picasso_thumb.jpg");
-  fullScreen(P3D);
-  
-  //size(96*factor, 60*factor, P3D);
+  //fullScreen(P3D);
+  size(96*factor, 60*factor, P3D);
 }
 
 //////////////////////////////////////////////
 void setup() {
+
+  filePath = sketchPath()+"/JSON/";
 
   colorMode(HSB, 360, 100, 100);
 
@@ -57,7 +56,9 @@ void setup() {
 
   cam = new Capture(this, 40*4, 30*4, 15);
   cam.start();
+
   initGUI();
+
   img=new PImage( 30*4, 30*4);
   BLOB_FACTOR_X = height;
   BLOB_FACTOR_Y = height;
@@ -65,18 +66,21 @@ void setup() {
 
 //////////////////////////////////////////////
 void draw() {
-  background(0, 0, 100);
+  background(0, 0, 0);
   if (cam.available() == true) {
     cam.read();
     img.copy(cam, (cam.width-cam.height)/2, 0, cam.height, cam.height, 0, 0, img.width, img.height);
   }
 
   if (bDrawImage) {
+    cam.updatePixels();
     image(cam, 0, 0, width, height);
   }
 
-  compute();
+  //filterVisage(blurlvl, thresh);
 
+  computeBlobs();
+  computeDiagrams();
   if (bDrawContours) {
     pushMatrix();
     translate(width/2 - BLOB_FACTOR_X/2, 0);
@@ -91,8 +95,6 @@ void draw() {
   if (bExportPDF)
   {
     beginRecord(PDF, getTime()+".pdf");
-    //("/Users/markwebster/Desktop/toPrint/..."); > the address
-    //colorMode(HSB, 360, 100, 100);
   }
 
   if (bDrawDiagram) {
@@ -110,7 +112,7 @@ void draw() {
         }
         popMatrix();
         if (isJsonExport) {
-          calculateJSON(levels, isJsonExport);
+          //          calculateJSON(levels, isJsonExport);
           isJsonExport = false;
         }
         calculateTotalDiaPoints(levels);
@@ -128,8 +130,10 @@ void draw() {
 
   if (theButton.isClick()) {
     takePicture();
+  } else {
+    displayWait();
   }
-
+  displayBorders();
 
   if (isGUI) {
     cp5.show();
@@ -143,6 +147,7 @@ void draw() {
 
 void takePicture() {
   println("taking a picture");
+  calculateJSON(levels, true);
   String pdfFileName = joinTheDotA4();
   Print(sketchPath()+"/PDF/" + pdfFileName + ".pdf");
 }
@@ -151,19 +156,19 @@ String joinTheDotA4() {
   String fileName =  getTime() ;
   int itemIndex = (int)s1.getValue();
   String algorithm = algorithms[ itemIndex ];
+
   pushMatrix();
 
   beginRecord(PDF, "PDF/" + fileName + ".pdf");
+  background(255);
   translate(width/2, height/2);
   scale(0.6);
   translate(-width/2, -height/2);
   stroke(0);
-  rect(0, 0, width, height);
+  rect(0, 0, BLOB_FACTOR_X, BLOB_FACTOR_Y);
 
   colorMode(HSB, 360, 100, 100, 100); //needs to be set for PDF  
   if (theDiagrams != null) {
-            translate(width/2 - BLOB_FACTOR_X/2, 0);
-
     for (int i=0; i<theDiagrams.length; i++) {
       theDiagrams[i].compute(numDots, 20, algorithm); // 10 : SIMPLE [best]
       theDiagrams[i].displayDotDiagram(lineThresh, true, bDrawDiagramDotNumbers, i);
@@ -173,4 +178,88 @@ String joinTheDotA4() {
   pushMatrix();
 
   return fileName;
+}
+
+
+void displayWait() {
+  String merci = "╔╦╗╔═╗╦═╗╔═╗╦║║║║╣ ╠╦╝║  ║╩ ╩╚═╝╩╚═╚═╝╩";
+  text(merci, 0, 5);
+  textSize(20);
+}
+
+void displayBorders() {
+  float dotSize = 5;
+  noStroke();
+  float xOffset = 0;
+  float yOffset = 0;
+
+
+  for (int x=40; x<width-40; x+=15) {
+    float h = map(x, 0, width-40, 1, 360);
+    fill(h, 100, 100);
+    if (x%2==0) {
+      yOffset=5;
+    } else {
+      yOffset=-5;
+    }
+    ellipse(x, 40+yOffset, dotSize, dotSize);
+  }
+  pushMatrix();
+  translate(0, height-70);
+  for (int x=40; x<width-40; x+=15) {
+    float h = map(x, 0, width-40, 1, 360);
+    fill(h, 100, 100);
+    if (x%2==0) {
+      yOffset=5;
+    } else {
+      yOffset=-5;
+    }
+    ellipse(x, 40+yOffset, dotSize, dotSize);
+  }
+  popMatrix();
+
+  for (int y=40; y<height-40; y+=15) {
+    float h = map(y, 0, height-40, 1, 360);
+    fill(h, 100, 100);
+    if (y%2==0) {
+      yOffset=5;
+    } else {
+      yOffset=-5;
+    }
+    ellipse(40, y+yOffset, dotSize, dotSize);
+  }
+  pushMatrix();
+  translate(width-80, 0);
+  for (int y=40; y<height-40; y+=15) {
+    float h = map(y, 0, height-40, 1, 360);
+    fill(h, 100, 100);
+    if (y%2==0) {
+      yOffset=5;
+    } else {
+      yOffset=-5;
+    }
+    ellipse(40, y+yOffset, dotSize, dotSize);
+  }
+  popMatrix();
+}
+
+void displaySAMName(float _displayX, float _displayY) {
+  float txtPosX = 0;
+  float txtPosY = 10;
+  float interLine = 26;
+  pushMatrix();
+  translate(_displayX, _displayY);
+  textSize(8);
+  fill(0, 0, 100);
+  text("...............................", txtPosX, txtPosY-22);
+  textSize(12);
+  fill(0, 0, 100);
+  String s = "╔═╗╔═╗╔╦╗\n╚═╗╠═╣║║║\n╚═╝╩ ╩╩ ╩";
+  text(s, 0, 5);
+  textSize(8);
+  text("...............................", txtPosX, txtPosY+34);
+  textSize(12);
+  text("La machine ", 70, 20);
+  text("qui dessine", 70, 31);
+  popMatrix();
 }

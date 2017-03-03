@@ -37,15 +37,7 @@ void computeDiagrams() {
 }
 
 ////////////////////////////////////////
-void compute() {
-  //filterVisage(blurlvl, thresh);
 
-  computeBlobs();
-  computeDiagrams();
-}
-
-////////////////////////////////////////
-////////////////////////////////////////
 void drawContours(int i, int scaleX, int scaleY, int offsetX, int offsetY) {
   Blob b;
   EdgeVertex eA, eB;
@@ -141,7 +133,7 @@ ArrayList<PVector> getPVectorFromBlobDetection(BlobDetection bd, int scaleX, int
 }
 
 ////////////////////////////////////////
-void keyPressed() {
+void keyReleased() {
   if (key == 'h') {
     isGUI =!isGUI;
   }
@@ -154,8 +146,9 @@ void keyPressed() {
     println("Number of actual dots = "+numberPoints);
   }
   if (key == 'p') {
-    isJsonExport = !isJsonExport;
-    bExportPDF = !bExportPDF;
+    //isJsonExport = !isJsonExport;
+        takePicture();
+    //bExportPDF = !bExportPDF;
   }
   if (key == 'a') {
     println(img.width);

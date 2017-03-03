@@ -23,24 +23,24 @@ class DotDiagram {
 
   int getNumPoints() {
     int n = 0;
-    if (FILTER_PNTS != null ){
+    if (FILTER_PNTS != null ) {
       n = FILTER_PNTS.size();
     }
     return n;
   }
 
-  ArrayList <PVector> getFilterPoints(){
+  ArrayList <PVector> getFilterPoints() {
     return FILTER_PNTS;
   }
 
 
-  PVector getPoint(int _i){
-     PVector p = FILTER_PNTS.get(_i);
-     return p;
+  PVector getPoint(int _i) {
+    PVector p = FILTER_PNTS.get(_i);
+    return p;
   }
 
 
-  void compute(int _step, int _mult, String _type){
+  void compute(int _step, int _mult, String _type) {
     if (SIMPLE_PNTS == null || SIMPLE_PNTS.size() == 0) return;
 
     if (_type.equals("SIMPLE")) {
@@ -95,16 +95,16 @@ class DotDiagram {
 
   // square distance between 2 points
   public float getSqDist(PVector p1, PVector p2) {
-    float dx = p1.x - p2.x,
+    float dx = p1.x - p2.x, 
       dy = p1.y - p2.y;
     return dx * dx + dy * dy;
   }
 
   // square distance from a point to a segment
   public float getSqSegDist(PVector p, PVector p1, PVector p2) {
-    float x = p1.x,
-      y = p1.y,
-      dx = p2.x - x,
+    float x = p1.x, 
+      y = p1.y, 
+      dx = p2.x - x, 
       dy = p2.y - y;
     if (dx != 0 || dy != 0) {
       float t = ((p.x - x) * dx + (p.y - y) * dy) / (dx * dx + dy * dy);
@@ -221,51 +221,29 @@ float calculateDistance(PVector _last, PVector _target) {
   return d;
 }
 
-void calculateTotalDiaPoints(int _levels){
+void calculateTotalDiaPoints(int _levels) {
   //levels = _levels;
   numberPoints = 0;
-  for(int i=0; i<_levels; i++) {
+  for (int i=0; i<_levels; i++) {
     numberPoints += theDiagrams[i].getNumPoints();
   }
 }
 
 
-void calculateJSON(int _levels, boolean _b){
+void calculateJSON(int _levels, boolean _b) {
   ArrayList<PVector> ALL_PNTS = new ArrayList<PVector>(); // all points
   levels = _levels;
   /*
   for(int i=1; i<_levels; i++) {
-    for(int j=0;j<theDiagrams[i].FILTER_PNTS.size();j++){
-    ALL_PNTS.add(theDiagrams[i].FILTER_PNTS.get(j));
-    }
-  }
-*/
+   for(int j=0;j<theDiagrams[i].FILTER_PNTS.size();j++){
+   ALL_PNTS.add(theDiagrams[i].FILTER_PNTS.get(j));
+   }
+   }
+   */
   //ArrayList<PVector> points = new ArrayList<PVector>();
   for (int i=0; i<_levels; i++) {
-    ALL_PNTS.addAll( getPVectorFromBlobDetection( theBlobDetection[i],height,height ) );
-}
-
-  if(CANNY){
-  myTSP.applyTSP(getBlackPoints());
-  for(int i=0; i<myTSP.SAVED_PNTS.size();i++){
-    PVector cannyPoints = myTSP.SAVED_PNTS.get(i);
-    ALL_PNTS.add(cannyPoints);
+    ALL_PNTS.addAll( getPVectorFromBlobDetection( theBlobDetection[i], height, height ) );
   }
-}
-    DATA.setData(ALL_PNTS, _levels, _b);
 
-}
-
-// quick n' dirty
-ArrayList<PVector> getBlackPoints() {
-  ArrayList<PVector> blackPoints = new ArrayList<PVector>();
-  loadPixels();
-  for (int x = 5; x < width-5; x++) {
-    for (int y = 5; y < height-5; y++) {
-      if (brightness(pixels[y*width+x])<33) {
-        blackPoints.add(new PVector(x, y));
-      }
-    }
-  }
-  return blackPoints;
+  DATA.setData(ALL_PNTS, _levels, _b);
 }

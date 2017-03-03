@@ -6,6 +6,7 @@ void joinTheDotA4() {
   int DiagramOffX = 30;
   int pointCounter = 0;
   float pdfDotSize = 3;
+
   PGraphics pdf = createGraphics(596, 842, PDF, sketchPath() + "/PDF/" + fileName + ".pdf");
   pdf.beginDraw();
   pdf.fill(150, 100, 100);
@@ -17,7 +18,7 @@ void joinTheDotA4() {
         println("pas de points");
         //return;
       } else {
-        pdf.textSize(1);
+        //pdf.textSize(1);
         pdf.textFont(monoSmall);
         for (int j=0; j<theDiagrams[i].FILTER_PNTS.size () - 1; j++) {
           PVector p1 = theDiagrams[i].FILTER_PNTS.get(j);
@@ -80,8 +81,6 @@ void joinTheDotA4() {
               pdf.stroke(0, 0, 0);
               pdf.strokeWeight(0.5);
               pdf.rect(p1.x*s + DiagramOffX, p1.y*s + DiagramOffY, pdfDotSize+2, pdfDotSize+2);
-
-              float lineLength = 2;
             }
 
             if (i==5) {
@@ -89,44 +88,19 @@ void joinTheDotA4() {
               pdf.fill(0, 0, 0);
               pdf.noStroke();
               pdf.rect(p1.x*s + DiagramOffX, p1.y*s + DiagramOffY, pdfDotSize+1, pdfDotSize+1);
-
-              float lineLength = 2;
-            } else {
-              pdf.noStroke();
-              pdf.fill(0, 0, 0);
-              pdf.ellipse(p1.x*s + DiagramOffX, p1.y*s + DiagramOffY, pdfDotSize, pdfDotSize);
-
-
-              pdf.ellipse(p1.x*s + DiagramOffX, p1.y*s + DiagramOffY, pdfDotSize+1, pdfDotSize+1);
-              pdf.ellipse(ps.x*s + DiagramOffX, ps.y*s+ DiagramOffY, pdfDotSize+10, pdfDotSize+10);
-              pdf.ellipse(pe.x*s + DiagramOffX, pe.y*s+ DiagramOffY, pdfDotSize+10, pdfDotSize+10);
             }
+          } else {
+            pdf.noStroke();
+            pdf.fill(0, 0, 0);
+            pdf.ellipse(p1.x*s + DiagramOffX, p1.y*s + DiagramOffY, pdfDotSize, pdfDotSize);
+            pdf.ellipse(p1.x*s + DiagramOffX, p1.y*s + DiagramOffY, pdfDotSize+1, pdfDotSize+1);
+            pdf.ellipse(ps.x*s + DiagramOffX, ps.y*s+ DiagramOffY, pdfDotSize+10, pdfDotSize+10);
+            pdf.ellipse(pe.x*s + DiagramOffX, pe.y*s+ DiagramOffY, pdfDotSize+10, pdfDotSize+10);
           }
         }
       }
-      pdf.dispose();
-      pdf.endDraw();
-
-      ////background(255);
-      //pdf.translate(width/2, height/2);
-      //pdf.scale(0.6);
-      //pdf.translate(-width/2, -height/2);
-      //pdf.stroke(0);
-      //pdf.rect(0, 0, BLOB_FACTOR_X, BLOB_FACTOR_Y);
     }
-    pse(ps.x*s + DiagramOffX, ps.y*s+ DiagramOffY, pdfDotSize+10, pdfDotSize+10);
-    pdf.ellipse(pe.x*s + DiagramOffX, pe.y*s+ DiagramOffY, pdfDotSize+10, pdfDotSize+10);
+    pdf.dispose();
+    pdf.endDraw();
   }
-}
-}
-}
-pdf.dispose();
-pdf.endDraw();
-
-////background(255);
-//pdf.translate(width/2, height/2);
-//pdf.scale(0.6);
-//pdf.translate(-width/2, -height/2);
-//pdf.stroke(0);
-//pdf.rect(0, 0, BLOB_FACTOR_X, BLOB_FACTOR_Y);
 }

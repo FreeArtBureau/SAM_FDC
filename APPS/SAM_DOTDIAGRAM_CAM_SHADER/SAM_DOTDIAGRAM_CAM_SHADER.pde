@@ -36,7 +36,7 @@ physicalButton theButton = new physicalButton(this, 2);
 BlobDetection[] theBlobDetection = new BlobDetection[int(levels)];
 DotDiagram[] theDiagrams;
 
-PFont mono, monoSmall ;
+PFont mono, monoSmall;
 // The font "andalemo.ttf" must be located in the 
 // current sketch's "data" directory to load successfully
 

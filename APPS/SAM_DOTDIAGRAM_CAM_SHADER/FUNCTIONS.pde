@@ -23,6 +23,7 @@ void computeBlobs() {
 ////////////////////////////////////////
 void computeDiagrams() {
   //println("-- computeDiagrams()");
+  try {
   if (bComputeGlobalDiagram) {
     theDiagrams = new DotDiagram[1];
     theDiagrams[0] = new DotDiagram();
@@ -33,6 +34,10 @@ void computeDiagrams() {
       theDiagrams[i] = new DotDiagram();
       theDiagrams[i].setDiagramPoints( getPVectorFromBlobDetection( theBlobDetection[i], BLOB_FACTOR_X, BLOB_FACTOR_Y ) );
     }
+  }
+  }
+    catch(Exception e) {
+    //println("...just checking...");
   }
 }
 

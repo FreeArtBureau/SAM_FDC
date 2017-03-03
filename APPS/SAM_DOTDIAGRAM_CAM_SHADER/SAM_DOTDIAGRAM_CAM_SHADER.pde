@@ -47,8 +47,8 @@ void settings() {
 
   // for infos resolution IMAC 2009 = 1680 x 1050
   // so screen ratio = 1.6
-  //fullScreen(P3D);
-  size(1680, 1050, P3D);
+  fullScreen(P3D);
+  //size(1680, 1050, P3D);
 }
 
 //////////////////////////////////////////////
@@ -160,9 +160,10 @@ void draw() {
 void takePicture() {
   fileName = getTime();
   println("taking a picture");
+   saveFrame(filePath + "/"+fileName+".png");
+
   calculateJSON(levels, true);
   joinTheDotA4();
-  saveFrame(filePath + "/"+fileName+".png");
   Print(sketchPath()+"/PDF/" + fileName + ".pdf");
 }
 

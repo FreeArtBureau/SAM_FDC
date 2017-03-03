@@ -15,12 +15,14 @@ void Print(String _path) {
   if (psStream == null) {
     return;
   }
+  
   DocFlavor psInFormat = DocFlavor.INPUT_STREAM.AUTOSENSE;
   Doc myDoc = new SimpleDoc(psStream, psInFormat, null);  
   PrintRequestAttributeSet aset = new HashPrintRequestAttributeSet();
+  
   aset.add(MediaSizeName.ISO_A4);
   aset.add(new PrinterResolution(300, 300, PrinterResolution.DPI));
-  aset.add(OrientationRequested.LANDSCAPE);
+  aset.add(OrientationRequested.PORTRAIT);
 
   // this step is necessary because I have several printers configured
   PrintService myPrinter = PrintServiceLookup.lookupDefaultPrintService();

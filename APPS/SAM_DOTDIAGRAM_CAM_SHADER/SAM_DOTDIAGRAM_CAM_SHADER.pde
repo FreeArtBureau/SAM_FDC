@@ -17,7 +17,13 @@ import java.util.*;
 JsonData DATA;
 boolean isJsonExport = false;
 //String filePath ; //= sketchPath()+"/JSON/";
-String filePath= "/Users/esad/Google Drive/SAM_BEAUBOURG_JSON/";
+
+//IMAC VIGO
+//String filePath= "/Users/esad/Google Drive/SAM_BEAUBOURG_JSON/";
+
+//MACPRO VIGO
+String filePath= "/Users/vjm/Google Drive/SAM GOES TO BEAUBOURG/SAM_BEAUBOURG_JSON";
+
 String fileName ;
 
 //String filePath = "";
@@ -30,7 +36,7 @@ physicalButton theButton = new physicalButton(this, 2);
 BlobDetection[] theBlobDetection = new BlobDetection[int(levels)];
 DotDiagram[] theDiagrams;
 
-PFont mono ;
+PFont mono, monoSmall ;
 // The font "andalemo.ttf" must be located in the 
 // current sketch's "data" directory to load successfully
 
@@ -38,7 +44,6 @@ Capture cam;
 PImage img;
 //String direct = "/Users/markwebster/Desktop/toPrint";
 String TIME;
-TSP myTSP;
 //boolean newFrame=false;
 int BLOB_FACTOR_X, BLOB_FACTOR_Y;
 //////////////////////////////////////////////
@@ -54,12 +59,12 @@ void settings() {
 //////////////////////////////////////////////
 void setup() {
   mono = createFont("mono.ttf", 140);
-  textFont(mono);
+  monoSmall = createFont("mono.ttf", 8);
 
+  textFont(mono);
 
   colorMode(HSB, 360, 100, 100);
 
-  myTSP = new TSP();
   DATA = new JsonData(0);
 
   cam = new Capture(this, 40*4, 30*4, 15);
@@ -100,10 +105,7 @@ void draw() {
     popMatrix();
   }
   //-------------------- > we only want to export the diagram for the printer ;–)
-  if (bExportPDF)
-  {
-    beginRecord(PDF, getTime()+".pdf");
-  }
+
 
   if (bDrawDiagram) {
     try {
@@ -131,14 +133,8 @@ void draw() {
     }
   }
 
-  if (bExportPDF) {
-    endRecord();
-    bExportPDF = false;
-  }
 
-  if (theButton.isClick()) {
-    takePicture();
-  } 
+
 
 
   if (theButton.hasFinished() == false) {
@@ -160,39 +156,11 @@ void draw() {
 void takePicture() {
   fileName = getTime();
   println("taking a picture");
-   saveFrame(filePath + "/"+fileName+".png");
+  //saveFrame(filePath + "/"+fileName+".png");
 
-  calculateJSON(levels, true);
+  //calculateJSON(levels, true);
   joinTheDotA4();
   Print(sketchPath()+"/PDF/" + fileName + ".pdf");
-}
-
-void joinTheDotA4() {
-  String fileName =  getTime() ;
-  int itemIndex = (int)s1.getValue();
-  String algorithm = algorithms[ itemIndex ];
-
-  pushMatrix();
-
-  beginRecord(PDF, "PDF/" + fileName + ".pdf");
-  //background(255);
-  translate(width/2, height/2);
-  scale(0.6);
-  translate(-width/2, -height/2);
-  stroke(0);
-  rect(0, 0, BLOB_FACTOR_X, BLOB_FACTOR_Y);
-
-  colorMode(HSB, 360, 100, 100, 100); //needs to be set for PDF  
-  if (theDiagrams != null) {
-    for (int i=0; i<theDiagrams.length; i++) {
-      theDiagrams[i].compute(numDots, 20, algorithm); // 10 : SIMPLE [best]
-      theDiagrams[i].displayDotDiagram(lineThresh, true, bDrawDiagramDotNumbers, i);
-    }
-  }
-  endRecord();
-  background(0, 0, 0);
-  pushMatrix();
-
 }
 
 
@@ -221,7 +189,6 @@ void displayBorders() {
   noStroke();
   float xOffset = 0;
   float yOffset = 0;
-
 
   for (int x=40; x<width-40; x+=15) {
     float h = map(x, 0, width-40, 1, 360);

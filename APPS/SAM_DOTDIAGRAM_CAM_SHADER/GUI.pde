@@ -23,6 +23,8 @@ float txtSize = 9.0;
 boolean bDrawContours;
 boolean bDrawContoursVertex;
 
+int print_Lvl=1;
+boolean bShapes = true;
 PFont f;
 boolean isGUI = false;
 boolean bExportPDF = false;
@@ -40,6 +42,9 @@ String[]  algorithms = {"RADIAL", "SIMPLE", "PEUCKER"};
 boolean CANNY = false; // shade
 float CANNY_THRESH;
 
+boolean bPrintNumbers = false;
+
+int skipNumber;
 float xGuiPos = 10;
 float yGuiPos = 25;
 float yOffSlider = 10;
@@ -169,7 +174,7 @@ void initGUI() {
 
   ////////////////////////////////////////
   //--------------------- > Add GROUP 3 DIAGRAMS for join the dots
-  Group g3  =  cp5.addGroup("g3")
+  Group g3 = cp5.addGroup("g3")
     .setPosition(xGuiPos, 155)
     .setWidth(210)
     .activateEvent(true)
@@ -180,7 +185,7 @@ void initGUI() {
 
   //--------------------- > diagram params
   cp5.addSlider("numDots")
-    .setRange(1, 30)
+    .setRange(1, 200)
     .setPosition(2, 5)
     .setHeight(15)
     .setWidth(120)
@@ -220,10 +225,23 @@ void initGUI() {
 
 
   //--------------------- > diagram params
-  cp5.addToggle("bDrawDiagram").setLabel("diagram").setPosition(2, yGuiPos+(yOffButton*3)).setGroup(g3);
-  cp5.addToggle("bDrawDiagramLines").setLabel("lines").setPosition(2+50, yGuiPos+(yOffButton*3)).setGroup(g3);
-  cp5.addToggle("bDrawDiagramDotNumbers").setLabel("dots").setPosition(2+100, yGuiPos+(yOffButton*3)).setGroup(g3);
-  cp5.addToggle("bComputeGlobalDiagram").setLabel("one diagram").setPosition(2, yGuiPos+(yOffButton*5)).setGroup(g3);
+  cp5.addToggle("bDrawDiagram")
+    .setLabel("diagram")
+    .setPosition(2, yGuiPos+(yOffButton*3))
+    .setGroup(g3);
+
+  cp5.addToggle("bDrawDiagramLines")
+    .setLabel("lines").setPosition(2+50, yGuiPos+(yOffButton*3))
+    .setGroup(g3);
+
+  cp5.addToggle("bDrawDiagramDotNumbers")
+    .setLabel("dots").setPosition(2+100, yGuiPos+(yOffButton*3))
+    .setGroup(g3);
+
+  cp5.addToggle("bComputeGlobalDiagram")
+    .setLabel("one diagram")
+    .setPosition(2, yGuiPos+(yOffButton*5))
+    .setGroup(g3);
 
   //--------------------- > Export & properties save
   cp5.addButton("exportPDF")
@@ -244,7 +262,40 @@ void initGUI() {
   //cp5.addTextField().setLabel("load values").setPosition(2, yGuiPos+(yOffButton*8.5)).setGroup(g3);
   //getNumPoints
   // Be careful - this saves all cp5 properties including controllers!
-  cp5.loadProperties("values_init");
+  //cp5.loadProperties("values_init");
+
+  /////GROUP FOR PRINTED DIAGRAM
+
+  Group g4 = cp5.addGroup("g4")
+    .setPosition(xGuiPos, 450)
+    .setWidth(210)
+    .activateEvent(true)
+    .setBackgroundColor(color( #C9BFBF, 33 ))  //#CED2DB, #C9BFBF
+    .setBackgroundHeight(260)
+    .setLabel("DIAGRAM PRINT")
+    .setBarHeight(18);
+
+  cp5.addSlider("print_Lvl")
+    .setRange(0, 20)
+    .setPosition(2, 10)
+    .setHeight(15)
+    .setWidth(120)
+    .setGroup(g4);
+
+    cp5.addToggle("bPrintNumbers")
+    .setLabel("NB").setPosition(2, yGuiPos+10)
+    .setGroup(g4);
+  
+  cp5.addSlider("skipNumber")
+    .setRange(1, 10)
+    .setPosition(2, (yGuiPos+10) * 2+4)
+    .setHeight(15)
+    .setWidth(120)
+    .setGroup(g4);
+
+  cp5.addToggle("bShapes")
+    .setLabel("SHP").setPosition(2, (yGuiPos+10) * 3+4)
+    .setGroup(g4);
 }
 
 

@@ -34,6 +34,8 @@ class DotDiagram {
   }
 
 
+ 
+ 
   PVector getPoint(int _i) {
     PVector p = FILTER_PNTS.get(_i);
     return p;

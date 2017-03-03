@@ -16,9 +16,11 @@ import java.util.*;
 
 JsonData DATA;
 boolean isJsonExport = false;
-String filePath ; //= sketchPath()+"/JSON/";
-//String filePath;
-//String filePath = "/Users/tisane/Desktop/JSON/";
+//String filePath ; //= sketchPath()+"/JSON/";
+String filePath= "/Users/esad/Google Drive/SAM_BEAUBOURG_JSON/";
+String fileName ;
+
+//String filePath = "";
 
 int numberPoints;
 int factor = 14; // image size
@@ -54,7 +56,6 @@ void setup() {
   mono = createFont("mono.ttf", 140);
   textFont(mono);
 
-  filePath = sketchPath()+"/JSON/";
 
   colorMode(HSB, 360, 100, 100);
 
@@ -157,13 +158,15 @@ void draw() {
 
 
 void takePicture() {
+  fileName = getTime();
   println("taking a picture");
   calculateJSON(levels, true);
-  String pdfFileName = joinTheDotA4();
-  //Print(sketchPath()+"/PDF/" + pdfFileName + ".pdf");
+  joinTheDotA4();
+  saveFrame(filePath + "/"+fileName+".png");
+  Print(sketchPath()+"/PDF/" + fileName + ".pdf");
 }
 
-String joinTheDotA4() {
+void joinTheDotA4() {
   String fileName =  getTime() ;
   int itemIndex = (int)s1.getValue();
   String algorithm = algorithms[ itemIndex ];
@@ -189,7 +192,6 @@ String joinTheDotA4() {
   background(0, 0, 0);
   pushMatrix();
 
-  return fileName;
 }
 
 
@@ -206,7 +208,6 @@ void displayWait() {
 
   float cd = 0.0;
   cd  =  millis() - theButton.lastClick ;
-  println(theButton.WAIT_TIME/1000 - cd/1000);
   String w = ""+ nf(theButton.WAIT_TIME/1000 - cd/1000, 2, 1);
   text(merci, 0, 500, width, height);
 }
